@@ -88,6 +88,27 @@
         margin-top: 4px;
         display: none;
       }
+      .ig-wrapper {
+        display: flex;
+        align-items: center;
+        background: #0f131b;
+        border: 1px solid #2a2f3a;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .ig-wrapper .ig-prefix {
+        padding: 10px;
+        font-size: 14px;
+        color: #9aa3b2;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      .ig-wrapper input {
+        border: none;
+        border-radius: 0;
+        padding-left: 0;
+        flex: 1;
+      }
     </style>
   </head>
   <body>
@@ -112,14 +133,18 @@
           <option value="m">Чоловіча</option>
         </select>
 
-        <label>Instagram (посилання) <span class="req">*</span></label>
-        <input
-          name="instagram"
-          type="url"
-          placeholder="https://www.instagram.com/username"
-          required
-        />
-        <div class="error-msg" id="err-ig">Вкажіть посилання виду https://instagram.com/username</div>
+        <label>Instagram <span class="req">*</span></label>
+        <div class="ig-wrapper">
+          <span class="ig-prefix">instagram.com/</span>
+          <input
+            name="instagram"
+            type="text"
+            placeholder="username"
+            required
+            onkeydown="if(event.key===' ')event.preventDefault();"
+          />
+        </div>
+        <div class="error-msg" id="err-ig">Введіть лише юзернейм (без посилання)</div>
 
         <label>Були у мене раніше? <span class="req">*</span></label>
         <div class="radio-group">
@@ -160,7 +185,7 @@
       const errIg = document.getElementById("err-ig");
       const errGeneral = document.getElementById("err-general");
       const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const igRe = /^https?:\/\/(www\.)?instagram\.com\/[A-Za-z0-9_.]+\/?$/;
+      const igRe = /^[A-Za-z0-9_.]{1,30}$/;
 
       form.addEventListener("submit", (e) => {
         e.preventDefault();
