@@ -133,7 +133,7 @@
         <label>Алергія на лідокаїн? <span class="req">*</span></label>
         <textarea name="q2" placeholder="Напр.: Ні" required></textarea>
 
-        <label>ВІЛ/імунодефіцит/діабет/щитоподібна/онкологія/вагітність/лактація? <span class="req">*</span></label>
+        <label>ВІЛ, імунодефіцит, діабет, щитоподібна, онкологія, вагітність, лактація? <span class="req">*</span></label>
         <textarea name="q3" placeholder="Напр.: Немає" required></textarea>
 
         <label>Чи приймаєте препарати? Якщо так — які <span class="req">*</span></label>
@@ -143,6 +143,7 @@
         <textarea name="q6" placeholder="Напр.: Вакцина 3 міс тому" required></textarea>
 
         <button type="submit">Надіслати</button>
+        <div class="error-msg" id="err-general">Не всі поля заповнені правильно</div>
       </form>
     </div>
 
@@ -157,6 +158,7 @@
       const errDate = document.getElementById("err-date");
       const errEmail = document.getElementById("err-email");
       const errIg = document.getElementById("err-ig");
+      const errGeneral = document.getElementById("err-general");
       const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       const igRe = /^https?:\/\/(www\.)?instagram\.com\/[A-Za-z0-9_.]+\/?$/;
 
@@ -188,6 +190,7 @@
           errIg.style.display = "none";
         }
 
+        errGeneral.style.display = ok ? "none" : "block";
         if (!ok) return;
 
         const data = Object.fromEntries(new FormData(form).entries());
