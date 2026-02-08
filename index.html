@@ -59,11 +59,15 @@
         background: #0f131b;
         color: #e6e6e6;
       }
-      input[type="date"],
       select {
         height: 42px;
-        appearance: none;
-        -webkit-appearance: none;
+      }
+      .date-row {
+        display: flex;
+        gap: 8px;
+      }
+      .date-row select {
+        flex: 1;
       }
       textarea {
         min-height: 90px;
@@ -122,17 +126,6 @@
         <input name="email" type="email" required onkeydown="if(event.key===' ')event.preventDefault();" />
         <div class="error-msg" id="err-email">Невірний формат email</div>
 
-        <label>Дата народження <span class="req">*</span></label>
-        <input name="birth_date" type="date" required />
-        <div class="error-msg" id="err-date">Дата має бути в минулому</div>
-
-        <label>Стать <span class="req">*</span></label>
-        <select name="gender" required>
-          <option value="">—</option>
-          <option value="f">Жіноча</option>
-          <option value="m">Чоловіча</option>
-        </select>
-
         <label>Instagram <span class="req">*</span></label>
         <div class="ig-wrapper">
           <span class="ig-prefix">instagram.com/</span>
@@ -146,27 +139,57 @@
         </div>
         <div class="error-msg" id="err-ig">Введіть лише юзернейм (без посилання)</div>
 
-        <label>Були у мене раніше? <span class="req">*</span></label>
-        <div class="radio-group">
-          <label><input type="radio" name="q0" value="Так" required /> Так</label>
-          <label><input type="radio" name="q0" value="Ні" required /> Ні</label>
+        <label>Дата народження <span class="req">*</span></label>
+        <div class="date-row">
+          <select id="bd-day" required><option value="">День</option></select>
+          <select id="bd-month" required><option value="">Місяць</option></select>
+          <select id="bd-year" required><option value="">Рік</option></select>
         </div>
+        <input name="birth_date" type="hidden" />
+        <div class="error-msg" id="err-date">Дата має бути в минулому</div>
+
+        <label>Стать <span class="req">*</span></label>
+        <select name="gender" required>
+          <option value="">—</option>
+          <option value="f">Жіноча</option>
+          <option value="m">Чоловіча</option>
+        </select>
+
+        <label>Були у мене раніше? <span class="req">*</span></label>
+        <select name="q0" required>
+          <option value="">—</option>
+          <option value="Так">Так</option>
+          <option value="Ні">Ні</option>
+        </select>
 
         <label>Чи кололи гіалурон у губи? Якщо так — який філер <span class="req">*</span></label>
-        <textarea name="q1" placeholder="Напр.: Так, Juvederm" required></textarea>
+        <textarea name="q1" placeholder="Наприклад: Так, Juvederm" required></textarea>
 
         <label>Алергія на лідокаїн? <span class="req">*</span></label>
-        <textarea name="q2" placeholder="Напр.: Ні" required></textarea>
+        <textarea name="q2" placeholder="Наприклад: Ні" required></textarea>
 
         <label>ВІЛ, імунодефіцит, діабет, щитоподібна, онкологія, вагітність, лактація? <span class="req">*</span></label>
-        <textarea name="q3" placeholder="Напр.: Немає" required></textarea>
+        <textarea name="q3" placeholder="Наприклад: Немає" required></textarea>
 
         <label>Чи приймаєте препарати? Якщо так — які <span class="req">*</span></label>
-        <textarea name="q5" placeholder="Напр.: Ні / Назва препарату" required></textarea>
+        <textarea name="q5" placeholder="Наприклад: Так / Назва препарату" required></textarea>
 
         <label>Вакцина або хвороба: коли саме? <span class="req">*</span></label>
-        <textarea name="q6" placeholder="Напр.: Вакцина 3 міс тому" required></textarea>
+        <textarea name="q6" placeholder="Наприклад: Вакцина 3 міс тому" required></textarea>
 
+        <label>Як ви про мене дізналися? <span class="req">*</span></label>
+        <select name="q7" required>
+          <option value="">—</option>
+          <option value="Instagram">Instagram</option>
+          <option value="TikTok">TikTok</option>
+          <option value="Рекомендація друзів">Рекомендація друзів</option>
+          <option value="Google/пошук">Google / пошук</option>
+          <option value="Facebook">Facebook</option>
+          <option value="YouTube">YouTube</option>
+          <option value="Інше">Інше</option>
+        </select>
+
+        <div style="margin-top: 16px;"></div>
         <button type="submit">Надіслати</button>
         <div class="error-msg" id="err-general">Не всі поля заповнені правильно</div>
       </form>
@@ -180,6 +203,43 @@
 
       if (tg) tg.ready();
 
+      // ─── Генерация селектов даты ─────────────
+      const bdDay = document.getElementById("bd-day");
+      const bdMonth = document.getElementById("bd-month");
+      const bdYear = document.getElementById("bd-year");
+      const monthNames = [
+        "Січень","Лютий","Березень","Квітень","Травень","Червень",
+        "Липень","Серпень","Вересень","Жовтень","Листопад","Грудень"
+      ];
+      for (let d = 1; d <= 31; d++) {
+        const o = document.createElement("option");
+        o.value = String(d).padStart(2, "0");
+        o.textContent = d;
+        bdDay.appendChild(o);
+      }
+      for (let m = 0; m < 12; m++) {
+        const o = document.createElement("option");
+        o.value = String(m + 1).padStart(2, "0");
+        o.textContent = monthNames[m];
+        bdMonth.appendChild(o);
+      }
+      const curYear = new Date().getFullYear();
+      for (let y = curYear; y >= curYear - 100; y--) {
+        const o = document.createElement("option");
+        o.value = y;
+        o.textContent = y;
+        bdYear.appendChild(o);
+      }
+
+      function syncBirthDate() {
+        const d = bdDay.value, m = bdMonth.value, y = bdYear.value;
+        form.birth_date.value = (d && m && y) ? `${y}-${m}-${d}` : "";
+      }
+      bdDay.addEventListener("change", syncBirthDate);
+      bdMonth.addEventListener("change", syncBirthDate);
+      bdYear.addEventListener("change", syncBirthDate);
+
+      // ─── Валидация ────────────────────────────
       const errDate = document.getElementById("err-date");
       const errEmail = document.getElementById("err-email");
       const errIg = document.getElementById("err-ig");
@@ -191,6 +251,7 @@
         e.preventDefault();
         let ok = true;
 
+        syncBirthDate();
         const bd = form.birth_date.value;
         if (!bd || bd >= new Date().toISOString().slice(0, 10)) {
           errDate.style.display = "block";
