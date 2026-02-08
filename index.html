@@ -24,6 +24,26 @@
         margin: 12px 0 6px;
         font-size: 14px;
       }
+      label .req {
+        color: #ff4d4d;
+      }
+      .radio-group {
+        display: flex;
+        gap: 16px;
+        padding: 10px 0;
+      }
+      .radio-group label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin: 0;
+        cursor: pointer;
+      }
+      .radio-group input[type="radio"] {
+        width: auto;
+        min-width: auto;
+        max-width: none;
+      }
       input,
       select,
       textarea,
@@ -62,101 +82,118 @@
         font-size: 12px;
         margin-top: 8px;
       }
+      .error-msg {
+        color: #ff4d4d;
+        font-size: 13px;
+        margin-top: 4px;
+        display: none;
+      }
     </style>
   </head>
   <body>
     <div class="card">
       <h2>Картка клієнта</h2>
       <form id="client-form">
-        <label>Імʼя</label>
+        <label>Імʼя <span class="req">*</span></label>
         <input name="name" type="text" required />
 
-        <label>Email</label>
-        <input name="email" type="email" />
+        <label>Email <span class="req">*</span></label>
+        <input name="email" type="email" required onkeydown="if(event.key===' ')event.preventDefault();" />
+        <div class="error-msg" id="err-email">Невірний формат email</div>
 
-        <label>Дата народження</label>
-        <input name="birth_date" type="date" />
+        <label>Дата народження <span class="req">*</span></label>
+        <input name="birth_date" type="date" required />
+        <div class="error-msg" id="err-date">Дата має бути в минулому</div>
 
-        <label>Стать</label>
-        <select name="gender">
+        <label>Стать <span class="req">*</span></label>
+        <select name="gender" required>
           <option value="">—</option>
           <option value="f">Жіноча</option>
           <option value="m">Чоловіча</option>
         </select>
 
-        <label>Instagram (посилання)</label>
+        <label>Instagram (посилання) <span class="req">*</span></label>
         <input
           name="instagram"
           type="url"
           placeholder="https://www.instagram.com/username"
           required
         />
+        <div class="error-msg" id="err-ig">Вкажіть посилання виду https://instagram.com/username</div>
 
-        <label>Чи кололи гіалурон у губи? Якщо так — який філер</label>
-        <textarea name="q1" placeholder="Напр.: Так, Juvederm"></textarea>
+        <label>Були у мене раніше? <span class="req">*</span></label>
+        <div class="radio-group">
+          <label><input type="radio" name="q0" value="Так" required /> Так</label>
+          <label><input type="radio" name="q0" value="Ні" required /> Ні</label>
+        </div>
 
-        <label>Алергія на лідокаїн?</label>
-        <textarea name="q2" placeholder="Напр.: Ні"></textarea>
+        <label>Чи кололи гіалурон у губи? Якщо так — який філер <span class="req">*</span></label>
+        <textarea name="q1" placeholder="Напр.: Так, Juvederm" required></textarea>
 
-        <label>ВІЛ/імунодефіцит/діабет/щитоподібна/онкологія/вагітність/лактація?</label>
-        <textarea name="q3" placeholder="Напр.: Немає"></textarea>
+        <label>Алергія на лідокаїн? <span class="req">*</span></label>
+        <textarea name="q2" placeholder="Напр.: Ні" required></textarea>
 
-        <label>Чи приймаєте препарати? Якщо так — які</label>
-        <textarea name="q5" placeholder="Напр.: Ні / Назва препарату"></textarea>
+        <label>ВІЛ/імунодефіцит/діабет/щитоподібна/онкологія/вагітність/лактація? <span class="req">*</span></label>
+        <textarea name="q3" placeholder="Напр.: Немає" required></textarea>
 
-        <label>Вакцина або хвороба: коли саме?</label>
-        <textarea name="q6" placeholder="Напр.: Вакцина 3 міс тому"></textarea>
+        <label>Чи приймаєте препарати? Якщо так — які <span class="req">*</span></label>
+        <textarea name="q5" placeholder="Напр.: Ні / Назва препарату" required></textarea>
 
-        <button type="submit">Надіслати!!</button>
+        <label>Вакцина або хвороба: коли саме? <span class="req">*</span></label>
+        <textarea name="q6" placeholder="Напр.: Вакцина 3 міс тому" required></textarea>
+
+        <button type="submit">Надіслати</button>
       </form>
     </div>
-
-    <div id="debug" style="margin:16px auto;max-width:560px;padding:12px;background:#1a1e28;border-radius:8px;font-size:12px;color:#9aa3b2;word-break:break-all;"></div>
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
       const form = document.getElementById("client-form");
-      const dbg = document.getElementById("debug");
-
-      function log(msg) {
-        const line = document.createElement("div");
-        line.textContent = new Date().toLocaleTimeString() + " — " + msg;
-        dbg.appendChild(line);
-      }
-
-      log("window.Telegram: " + (typeof window.Telegram));
-      log("window.Telegram.WebApp: " + (window.Telegram ? typeof window.Telegram.WebApp : "N/A"));
-
       const tg =
         window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
 
-      if (tg) {
-        tg.ready();
-        log("tg.ready() OK");
-        log("tg.initData: " + (tg.initData || "(пусто)"));
-        log("tg.initDataUnsafe: " + JSON.stringify(tg.initDataUnsafe || {}));
-        log("tg.platform: " + (tg.platform || "?"));
-        log("tg.version: " + (tg.version || "?"));
-      } else {
-        log("WebApp НЕ доступний — сторінка відкрита поза Telegram");
-      }
+      if (tg) tg.ready();
+
+      const errDate = document.getElementById("err-date");
+      const errEmail = document.getElementById("err-email");
+      const errIg = document.getElementById("err-ig");
+      const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const igRe = /^https?:\/\/(www\.)?instagram\.com\/[A-Za-z0-9_.]+\/?$/;
 
       form.addEventListener("submit", (e) => {
         e.preventDefault();
-        const data = Object.fromEntries(new FormData(form).entries());
-        const json = JSON.stringify(data);
-        log("Форма зібрана: " + json);
+        let ok = true;
 
-        if (tg) {
-          log("Викликаю tg.sendData()...");
-          try {
-            tg.sendData(json);
-            log("sendData() — OK! Дані відправлено.");
-          } catch (err) {
-            log("sendData() ПОМИЛКА: " + err.message);
-          }
+        const bd = form.birth_date.value;
+        if (!bd || bd >= new Date().toISOString().slice(0, 10)) {
+          errDate.style.display = "block";
+          ok = false;
         } else {
-          log("sendData неможливо — WebApp не доступний");
+          errDate.style.display = "none";
+        }
+
+        const em = form.email.value.trim();
+        if (!emailRe.test(em)) {
+          errEmail.style.display = "block";
+          ok = false;
+        } else {
+          errEmail.style.display = "none";
+        }
+
+        const ig = form.instagram.value.trim();
+        if (!igRe.test(ig)) {
+          errIg.style.display = "block";
+          ok = false;
+        } else {
+          errIg.style.display = "none";
+        }
+
+        if (!ok) return;
+
+        const data = Object.fromEntries(new FormData(form).entries());
+        if (tg) {
+          tg.sendData(JSON.stringify(data));
+        } else {
           alert("WebApp недоступний. Відкрийте форму в Telegram.");
         }
       });
