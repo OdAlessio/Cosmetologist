@@ -29,6 +29,8 @@
       textarea,
       button {
         width: 100%;
+        max-width: 100%;
+        min-width: 0;
         box-sizing: border-box;
         padding: 10px;
         border-radius: 8px;
@@ -40,6 +42,8 @@
       input[type="date"],
       select {
         height: 42px;
+        appearance: none;
+        -webkit-appearance: none;
       }
       textarea {
         min-height: 90px;
@@ -107,9 +111,11 @@
       </form>
     </div>
 
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
       const form = document.getElementById("client-form");
-      const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+      const tg =
+        window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
 
       if (tg) {
         tg.ready();
@@ -121,9 +127,9 @@
         if (tg) {
           tg.sendData(JSON.stringify(data));
           tg.close();
-        } else {
-          alert("WebApp недоступен.");
+          return;
         }
+        alert("WebApp недоступний. Відкрийте форму в Telegram.");
       });
     </script>
   </body>
