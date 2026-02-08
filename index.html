@@ -111,25 +111,55 @@
       </form>
     </div>
 
+    <div id="debug" style="margin:16px auto;max-width:560px;padding:12px;background:#1a1e28;border-radius:8px;font-size:12px;color:#9aa3b2;word-break:break-all;"></div>
+
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
       const form = document.getElementById("client-form");
+      const dbg = document.getElementById("debug");
+
+      function log(msg) {
+        const line = document.createElement("div");
+        line.textContent = new Date().toLocaleTimeString() + " — " + msg;
+        dbg.appendChild(line);
+      }
+
+      log("window.Telegram: " + (typeof window.Telegram));
+      log("window.Telegram.WebApp: " + (window.Telegram ? typeof window.Telegram.WebApp : "N/A"));
+
       const tg =
         window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
 
       if (tg) {
         tg.ready();
+        log("tg.ready() OK");
+        log("tg.initData: " + (tg.initData || "(пусто)"));
+        log("tg.initDataUnsafe: " + JSON.stringify(tg.initDataUnsafe || {}));
+        log("tg.platform: " + (tg.platform || "?"));
+        log("tg.version: " + (tg.version || "?"));
+      } else {
+        log("WebApp НЕ доступний — сторінка відкрита поза Telegram");
       }
 
       form.addEventListener("submit", (e) => {
         e.preventDefault();
         const data = Object.fromEntries(new FormData(form).entries());
+        const json = JSON.stringify(data);
+        log("Форма зібрана: " + json);
+
         if (tg) {
-          tg.sendData(JSON.stringify(data));
-          tg.close();
-          return;
+          log("Викликаю tg.sendData()...");
+          try {
+            tg.sendData(json);
+            log("sendData() — OK, закриваю...");
+            tg.close();
+          } catch (err) {
+            log("sendData() ПОМИЛКА: " + err.message);
+          }
+        } else {
+          log("sendData неможливо — WebApp не доступний");
+          alert("WebApp недоступний. Відкрийте форму в Telegram.");
         }
-        alert("WebApp недоступний. Відкрийте форму в Telegram.");
       });
     </script>
   </body>
