@@ -120,10 +120,10 @@
       <h2>Картка клієнта</h2>
       <form id="client-form">
         <label>Імʼя <span class="req">*</span></label>
-        <input name="name" type="text" required />
+        <input name="name" type="text" placeholder="Введіть ваше імʼя" required />
 
         <label>Email <span class="req">*</span></label>
-        <input name="email" type="email" required onkeydown="if(event.key===' ')event.preventDefault();" />
+        <input name="email" type="email" placeholder="Введіть ваш email" required onkeydown="if(event.key===' ')event.preventDefault();" />
         <div class="error-msg" id="err-email">Невірний формат email</div>
 
         <label>Instagram <span class="req">*</span></label>
@@ -137,7 +137,7 @@
             onkeydown="if(event.key===' ')event.preventDefault();"
           />
         </div>
-        <div class="error-msg" id="err-ig">Введіть лише юзернейм (без посилання)</div>
+        <div class="error-msg" id="err-ig">Введіть ваш юзернейм Instagram</div>
 
         <label>Дата народження <span class="req">*</span></label>
         <div class="date-row">
@@ -162,7 +162,7 @@
           <option value="Ні">Ні</option>
         </select>
 
-        <label>Чи кололи гіалурон у губи? Якщо так — який філер <span class="req">*</span></label>
+        <label>Чи кололи гіалурон у губи? Якщо так - який філер <span class="req">*</span></label>
         <textarea name="q1" placeholder="Наприклад: Так, Juvederm" required></textarea>
 
         <label>Алергія на лідокаїн? <span class="req">*</span></label>
