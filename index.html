@@ -1,292 +1,201 @@
 <!DOCTYPE html>
 <html lang="uk">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Форма клієнта</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        padding: 16px;
-        background: #0f1115;
-        color: #e6e6e6;
-      }
-      .card {
-        background: #151922;
-        border-radius: 12px;
-        padding: 16px;
-        max-width: 560px;
-        margin: 0 auto;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
-      }
-      label {
-        display: block;
-        margin: 12px 0 6px;
-        font-size: 14px;
-      }
-      label .req {
-        color: #ff4d4d;
-      }
-      .radio-group {
-        display: flex;
-        gap: 16px;
-        padding: 10px 0;
-      }
-      .radio-group label {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        margin: 0;
-        cursor: pointer;
-      }
-      .radio-group input[type="radio"] {
-        width: auto;
-        min-width: auto;
-        max-width: none;
-      }
-      input,
-      select,
-      textarea,
-      button {
-        width: 100%;
-        max-width: 100%;
-        min-width: 0;
-        box-sizing: border-box;
-        padding: 10px;
-        border-radius: 8px;
-        border: 1px solid #2a2f3a;
-        font-size: 14px;
-        background: #0f131b;
-        color: #e6e6e6;
-      }
-      select {
-        height: 42px;
-      }
-      .date-row {
-        display: flex;
-        gap: 8px;
-      }
-      .date-row select {
-        flex: 1;
-      }
-      textarea {
-        min-height: 90px;
-        resize: vertical;
-      }
-      button {
-        margin-top: 16px;
-        background: #3a7bff;
-        color: #fff;
-        border: none;
-        cursor: pointer;
-        font-weight: 600;
-      }
-      .hint {
-        color: #9aa3b2;
-        font-size: 12px;
-        margin-top: 8px;
-      }
-      .error-msg {
-        color: #ff4d4d;
-        font-size: 13px;
-        margin-top: 4px;
-        display: none;
-      }
-      .ig-wrapper {
-        display: flex;
-        align-items: center;
-        background: #0f131b;
-        border: 1px solid #2a2f3a;
-        border-radius: 8px;
-        overflow: hidden;
-      }
-      .ig-wrapper .ig-prefix {
-        padding: 10px;
-        font-size: 14px;
-        color: #9aa3b2;
-        white-space: nowrap;
-        flex-shrink: 0;
-      }
-      .ig-wrapper input {
-        border: none;
-        border-radius: 0;
-        padding-left: 0;
-        flex: 1;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="card">
-      <h2>Картка клієнта</h2>
-      <form id="client-form">
-        <label>Імʼя <span class="req">*</span></label>
-        <input name="name" type="text" placeholder="Введіть ваше імʼя" required />
-
-        <label>Email <span class="req">*</span></label>
-        <input name="email" type="email" placeholder="Введіть ваш email" required onkeydown="if(event.key===' ')event.preventDefault();" />
-        <div class="error-msg" id="err-email">Невірний формат email</div>
-
-        <label>Instagram <span class="req">*</span></label>
-        <div class="ig-wrapper">
-          <span class="ig-prefix">instagram.com/</span>
-          <input
-            name="instagram"
-            type="text"
-            placeholder="username"
-            required
-            onkeydown="if(event.key===' ')event.preventDefault();"
-          />
-        </div>
-        <div class="error-msg" id="err-ig">Введіть ваш юзернейм Instagram</div>
-
-        <label>Дата народження <span class="req">*</span></label>
-        <div class="date-row">
-          <select id="bd-day" required><option value="">День</option></select>
-          <select id="bd-month" required><option value="">Місяць</option></select>
-          <select id="bd-year" required><option value="">Рік</option></select>
-        </div>
-        <input name="birth_date" type="hidden" />
-        <div class="error-msg" id="err-date">Дата має бути в минулому</div>
-
-        <label>Стать <span class="req">*</span></label>
-        <select name="gender" required>
-          <option value="">—</option>
-          <option value="f">Жіноча</option>
-          <option value="m">Чоловіча</option>
-        </select>
-
-        <label>Були у мене раніше? <span class="req">*</span></label>
-        <select name="q0" required>
-          <option value="">—</option>
-          <option value="Так">Так</option>
-          <option value="Ні">Ні</option>
-        </select>
-
-        <label>Як ви про мене дізналися? <span class="req">*</span></label>
-        <select name="q7" required>
-          <option value="">—</option>
-          <option value="Instagram">Instagram</option>
-          <option value="TikTok">TikTok</option>
-          <option value="Threads">Threads</option>
-          <option value="Рекомендація друзів">Рекомендація друзів</option>
-          <option value="Google/пошук">Google / пошук</option>
-          <option value="Facebook">Facebook</option>
-          <option value="YouTube">YouTube</option>
-          <option value="Інше">Інше</option>
-        </select>
-
-        <label>Чи кололи гіалурон у губи? Якщо так - який філер <span class="req">*</span></label>
-        <textarea name="q1" placeholder="Наприклад: Так, Juvederm" required></textarea>
-
-        <label>Алергія на лідокаїн? <span class="req">*</span></label>
-        <textarea name="q2" placeholder="Наприклад: Ні" required></textarea>
-
-        <label>ВІЛ, імунодефіцит, діабет, щитоподібна, онкологія, вагітність, лактація? <span class="req">*</span></label>
-        <textarea name="q3" placeholder="Наприклад: Немає" required></textarea>
-
-        <label>Чи приймаєте препарати? Якщо так — які <span class="req">*</span></label>
-        <textarea name="q5" placeholder="Наприклад: Так / Назва препарату" required></textarea>
-
-        <label>Вакцина або хвороба: коли саме? <span class="req">*</span></label>
-        <textarea name="q6" placeholder="Наприклад: Вакцина 3 міс тому" required></textarea>
-
-        <div style="margin-top: 16px;"></div>
-        <button type="submit">Надіслати</button>
-        <div class="error-msg" id="err-general">Не всі поля заповнені правильно</div>
-      </form>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Додати в календар</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #1a1a2e;
+  color: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+.card {
+  background: #16213e;
+  border-radius: 16px;
+  padding: 28px 24px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0,0,0,.3);
+}
+.icon { font-size: 48px; margin-bottom: 12px; }
+h1 { font-size: 20px; margin-bottom: 16px; color: #fff; }
+.info { text-align: left; margin: 16px 0; }
+.info div { padding: 8px 0; border-bottom: 1px solid #ffffff15; }
+.info div:last-child { border: none; }
+.label { font-size: 13px; color: #888; }
+.value { font-size: 15px; color: #fff; margin-top: 2px; }
+.value a { color: #0a84ff; text-decoration: none; }
+.value a:hover { text-decoration: underline; }
+.btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  text-decoration: none;
+  text-align: center;
+}
+.btn-apple { background: #0a84ff; color: #fff; }
+.btn-google { background: #34a853; color: #fff; }
+.btn:active { opacity: .8; }
+.tg-banner {
+  background: #2a1a00;
+  border: 1px solid #ff950055;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  text-align: left;
+  font-size: 14px;
+  color: #ffcc80;
+  display: none;
+}
+.tg-banner b { color: #ffb74d; }
+.tg-banner .steps {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #cca060;
+  line-height: 1.5;
+}
+.cosmetolog {
+  margin-top: 16px;
+  font-size: 13px;
+  color: #888;
+}
+.cosmetolog a { color: #aaa; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div id="tgBanner" class="tg-banner">
+    <b>⚠️ Відкрийте в браузері</b>
+    <div class="steps">
+      Натисніть <b>⋮</b> (три крапки) у правому верхньому куті → <b>Відкрити в Safari</b>
     </div>
+  </div>
+  <div class="icon">📅</div>
+  <h1>Запис до косметолога dr_gulvakova</h1>
+  <div class="info">
+    <div>
+      <div class="label">Послуга</div>
+      <div class="value" id="srv">—</div>
+    </div>
+    <div>
+      <div class="label">Дата</div>
+      <div class="value" id="dt">—</div>
+    </div>
+    <div>
+      <div class="label">Час</div>
+      <div class="value" id="tm">—</div>
+    </div>
+    <div id="locRow" style="display:none">
+      <div class="label">Локація</div>
+      <div class="value"><a id="locLink" href="#" target="_blank">📍 Відкрити на карті</a></div>
+    </div>
+  </div>
 
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script>
-      const form = document.getElementById("client-form");
-      const tg =
-        window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+  <a class="btn btn-apple" id="btnApple" href="#">🍎 Додати в Apple Calendar</a>
+  <a class="btn btn-google" id="btnGoogle" href="#" target="_blank">📅 Додати в Google Calendar</a>
+  <div class="cosmetolog">Косметолог: <a href="https://instagram.com/dr_gulvakova" target="_blank">instagram.com/dr_gulvakova</a></div>
+</div>
+<script>
+(function(){
+  var p = new URLSearchParams(window.location.search);
+  var title = p.get('t') || 'Візит';
+  var start = p.get('s') || '';
+  var end   = p.get('e') || '';
+  var desc  = p.get('d') || '';
+  var loc   = p.get('l') || '';
 
-      if (tg) tg.ready();
+  // Detect Telegram WebView
+  var isTg = (typeof TelegramWebviewProxy !== 'undefined') ||
+             (navigator.userAgent.indexOf('Telegram') !== -1) ||
+             (window.TelegramWebview !== undefined);
 
-      // ─── Генерация селектов даты ─────────────
-      const bdDay = document.getElementById("bd-day");
-      const bdMonth = document.getElementById("bd-month");
-      const bdYear = document.getElementById("bd-year");
-      const monthNames = [
-        "Січень","Лютий","Березень","Квітень","Травень","Червень",
-        "Липень","Серпень","Вересень","Жовтень","Листопад","Грудень"
-      ];
-      for (let d = 1; d <= 31; d++) {
-        const o = document.createElement("option");
-        o.value = String(d).padStart(2, "0");
-        o.textContent = d;
-        bdDay.appendChild(o);
-      }
-      for (let m = 0; m < 12; m++) {
-        const o = document.createElement("option");
-        o.value = String(m + 1).padStart(2, "0");
-        o.textContent = monthNames[m];
-        bdMonth.appendChild(o);
-      }
-      const curYear = new Date().getFullYear();
-      for (let y = curYear; y >= curYear - 100; y--) {
-        const o = document.createElement("option");
-        o.value = y;
-        o.textContent = y;
-        bdYear.appendChild(o);
-      }
+  if(isTg){
+    document.getElementById('tgBanner').style.display = 'block';
+  }
 
-      function syncBirthDate() {
-        const d = bdDay.value, m = bdMonth.value, y = bdYear.value;
-        form.birth_date.value = (d && m && y) ? `${y}-${m}-${d}` : "";
-      }
-      bdDay.addEventListener("change", syncBirthDate);
-      bdMonth.addEventListener("change", syncBirthDate);
-      bdYear.addEventListener("change", syncBirthDate);
+  // Display info
+  document.getElementById('srv').textContent = title;
+  if(start){
+    var sd = new Date(start.replace(/(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z/,'$1-$2-$3T$4:$5:$6Z'));
+    var ed = end ? new Date(end.replace(/(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z/,'$1-$2-$3T$4:$5:$6Z')) : sd;
+    var opts = {day:'2-digit',month:'2-digit',year:'numeric',timeZone:'Europe/Kyiv'};
+    var topts = {hour:'2-digit',minute:'2-digit',timeZone:'Europe/Kyiv',hour12:false};
+    document.getElementById('dt').textContent = sd.toLocaleDateString('uk-UA', opts);
+    document.getElementById('tm').textContent = sd.toLocaleTimeString('uk-UA', topts) + '–' + ed.toLocaleTimeString('uk-UA', topts);
+  }
 
-      // ─── Валидация ────────────────────────────
-      const errDate = document.getElementById("err-date");
-      const errEmail = document.getElementById("err-email");
-      const errIg = document.getElementById("err-ig");
-      const errGeneral = document.getElementById("err-general");
-      const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const igRe = /^[A-Za-z0-9_.]{1,30}$/;
+  // Location
+  var locDisplay = loc || 'Косметолог';
+  if(loc){
+    document.getElementById('locRow').style.display = '';
+    document.getElementById('locLink').href = loc;
+  }
 
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        let ok = true;
+  // ICS — data: URI (works better in WebViews than blob:)
+  var ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//CosmetologBot//UA',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'BEGIN:VEVENT',
+    'UID:visit-' + Date.now() + '@cosmetolog-bot',
+    'DTSTAMP:' + start,
+    'DTSTART:' + start,
+    'DTEND:' + (end || start),
+    'SUMMARY:' + title,
+    'DESCRIPTION:' + desc.replace(/\n/g,'\\n'),
+    'LOCATION:' + locDisplay,
+    'STATUS:CONFIRMED',
+    'BEGIN:VALARM',
+    'TRIGGER:-P1D',
+    'ACTION:DISPLAY',
+    'DESCRIPTION:Нагадування: завтра у вас запис до косметолога',
+    'END:VALARM',
+    'BEGIN:VALARM',
+    'TRIGGER:-PT2H',
+    'ACTION:DISPLAY',
+    'DESCRIPTION:Нагадування: через 2 години у вас запис до косметолога',
+    'END:VALARM',
+    'END:VEVENT',
+    'END:VCALENDAR'
+  ].join('\r\n');
 
-        syncBirthDate();
-        const bd = form.birth_date.value;
-        if (!bd || bd >= new Date().toISOString().slice(0, 10)) {
-          errDate.style.display = "block";
-          ok = false;
-        } else {
-          errDate.style.display = "none";
-        }
+  var dataUri = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(ics);
 
-        const em = form.email.value.trim();
-        if (!emailRe.test(em)) {
-          errEmail.style.display = "block";
-          ok = false;
-        } else {
-          errEmail.style.display = "none";
-        }
+  document.getElementById('btnApple').href = dataUri;
+  document.getElementById('btnApple').download = 'zapys.ics';
 
-        const ig = form.instagram.value.trim();
-        if (!igRe.test(ig)) {
-          errIg.style.display = "block";
-          ok = false;
-        } else {
-          errIg.style.display = "none";
-        }
+  // Google Calendar
+  var gcal = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
+    + '&text=' + encodeURIComponent(title)
+    + '&dates=' + start + '/' + (end||start)
+    + '&details=' + encodeURIComponent(desc)
+    + '&location=' + encodeURIComponent(locDisplay);
+  document.getElementById('btnGoogle').href = gcal;
 
-        errGeneral.style.display = ok ? "none" : "block";
-        if (!ok) return;
-
-        const data = Object.fromEntries(new FormData(form).entries());
-        if (tg) {
-          tg.sendData(JSON.stringify(data));
-        } else {
-          alert("WebApp недоступний. Відкрийте форму в Telegram.");
-        }
-      });
-    </script>
-  </body>
+  // iOS outside Telegram: auto trigger
+  var isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+  if(isIOS && !isTg){
+    setTimeout(function(){
+      window.location.href = dataUri;
+    }, 500);
+  }
+})();
+</script>
+</body>
 </html>
